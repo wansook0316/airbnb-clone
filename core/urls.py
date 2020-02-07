@@ -6,4 +6,3 @@ app_name = "core"
 urlpatterns = [
     path("", room_views.all_rooms, name="home"),
 ]
-
