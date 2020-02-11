@@ -10,5 +10,4 @@ def all_rooms(request):
     room_list = models.Room.objects.all()
     paginator = Paginator(room_list, 10)  # 두번쨰 인지 페이지 수)
     rooms = paginator.get_page(page)
-    print(vars(rooms.paginator))
     return render(request, "rooms/home.html", {"rooms": rooms})
