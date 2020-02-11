@@ -1,18 +1,17 @@
-from datetime import datetime
-from math import ceil
-from django.shortcuts import render, redirect
-from django.core.paginator import Paginator, EmptyPage
+from django.views.generic import ListView
 from . import models
 
 
-def all_rooms(request):
-    page = request.GET.get("page", 1)  # default 값이 두번쨰 인자
-    room_list = models.Room.objects.all()
-    paginator = Paginator(room_list, 10, orphans=5)
-    # 두번쨰 인지 페이지 안의 행 개수, orphan은 마지막에 고아로 남는 행들을 마지막에 몇개가 생기면 보여줄 것인지
-    # rooms = paginator.get_page(page)
-    try:
-        rooms = paginator.page(int(page))
-        return render(request, "rooms/home.html", {"page": rooms})
-    except EmptyPage:  # 만약 다양한 경우의 예외에 대해 한번에 처리하고 싶으면 except Exception:
-        return redirect("/")
+class HomeView(ListView):
+
+    """HomeView Definition"""
+
+    # 해당 클래스의 property와 method는 ListView라고 django docs에 가도 되지만
+    # 보기 굉장히 짜증나기 때문에 classy class-Based Views https::/ccbv.co.uk 에 들어가자.
+
+    model = models.Room  # 어떤 모델을 보여줄 지 선택하면 자동으로 template/rooms/room_list.html을 찾는다!
+    paginate_by = 10
+    # page_kwarg = "potato" page=여기서 page의 이름을 바꿀 수 있음
+    paginate_orphans = 5
+    ordering = "created"  # model이 갖고 있는 feature 어떤 순으로 나열할 것인지
+
