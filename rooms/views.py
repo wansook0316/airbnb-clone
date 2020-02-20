@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.views.generic import ListView
 from . import models
 
@@ -14,4 +15,11 @@ class HomeView(ListView):
     # page_kwarg = "potato" page=여기서 page의 이름을 바꿀 수 있음
     paginate_orphans = 5
     ordering = "created"  # model이 갖고 있는 feature 어떤 순으로 나열할 것인지
+    context_object_name = "rooms"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = timezone.now()
+        context["now"] = now
+        return context
 
